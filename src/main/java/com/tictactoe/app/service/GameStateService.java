@@ -27,6 +27,7 @@ public class GameStateService implements TictactoeApiDelegate {
 		gameBoard.put("8", null);
 		gameBoard.put("9", null);
 		newGameInfo.setGameboard(gameBoard);
+		newGameInfo.message("Hello Mr.X and Mr.O your game started!,All the best and enjoy playing");
 		return new ResponseEntity<>(newGameInfo, HttpStatus.CREATED);
 	}
 }

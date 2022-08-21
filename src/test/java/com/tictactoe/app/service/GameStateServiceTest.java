@@ -41,6 +41,16 @@ public class GameStateServiceTest {
 		assertEquals(getDefaultGameBoard(), gameBoardInfo.getGameboard());
 	}
 
+	@Test
+	public void displayNewGameBoardStartMessage() throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(START_NEW_GAME_ENDPOINT);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		String responseBody = result.getResponse().getContentAsString();
+		ObjectMapper objectMapper = new ObjectMapper();
+		NewGameInfo gameBoardInfo = objectMapper.readValue(responseBody, NewGameInfo.class);
+		assertEquals("Hello Mr.X and Mr.O your game started!,All the best and enjoy playing",
+				gameBoardInfo.getMessage());
+	}
 	public Map<String, String> getDefaultGameBoard() {
 		Map<String, String> defaultGameBoard = new HashMap<>();
 		defaultGameBoard.put("1", null);
