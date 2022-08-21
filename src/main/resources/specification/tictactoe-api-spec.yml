@@ -1,0 +1,31 @@
+openapi: 3.0.1
+info:
+  title: Tic-Tac-Toe-api specification
+  version: v0
+servers:
+  - url: http://localhost:9090
+    description: Generated server url
+paths:
+  /tictactoe/startNewGame:
+    post:
+      tags:
+        - tic-tac-toe-controller
+      operationId: startNewGame
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewGameInfo'
+components:
+  schemas:
+    NewGameInfo:
+      type: object
+      properties:
+        message:
+          type: string
+        gameboard:
+          type: object
+          additionalProperties:
+            type: string
