@@ -22,17 +22,18 @@ import com.tictactoe.app.openapi.model.NewGameInfo;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class GameStateServiceTest {
+	private static final String START_NEW_GAME_ENDPOINT="/tictactoe/startNewGame";
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Test
 	public void checkStartNewGameServiceAvailable() throws Exception {
-		this.mockMvc.perform(post("/tictactoe/startNewGame")).andExpect(status().is(201));
+		this.mockMvc.perform(post(START_NEW_GAME_ENDPOINT)).andExpect(status().is(201));
 	}
 
 	@Test
 	public void checkNewGameBoardReady() throws Exception {
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/tictactoe/startNewGame");
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(START_NEW_GAME_ENDPOINT);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		String responseBody = result.getResponse().getContentAsString();
 		ObjectMapper objectMapper = new ObjectMapper();
