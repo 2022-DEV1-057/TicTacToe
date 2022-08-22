@@ -305,7 +305,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void getCurrentStateOfGameBoard() throws Exception {
+	void getCurrentStateOfGameBoard() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		gameStateService.setGameBoard(existingGameBoard);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/tictactoe/stateOfGameBoard");

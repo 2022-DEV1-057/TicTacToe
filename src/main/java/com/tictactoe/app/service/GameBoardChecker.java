@@ -40,17 +40,7 @@ public class GameBoardChecker {
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
 		if (playersCountWithMovesMap.size() == 2) {
-			long firstPlayerOccupencyCount = playersCountWithMovesMap.get(PLAYER_X);
-			long secondPlayerOccupencyCount = playersCountWithMovesMap.get(PLAYER_O);
-			long difference = firstPlayerOccupencyCount > secondPlayerOccupencyCount
-					? firstPlayerOccupencyCount - secondPlayerOccupencyCount
-					: secondPlayerOccupencyCount - firstPlayerOccupencyCount;
-			if (difference > 0 && ((firstPlayerOccupencyCount > secondPlayerOccupencyCount
-					&& PLAYER_X.equals(playerName))
-					|| (secondPlayerOccupencyCount > firstPlayerOccupencyCount && PLAYER_O.equals(playerName)))) {
-				log.info("--:Player-{} has taken wrong turn:--", playerName);
-				return Boolean.FALSE;
-			}
+			return playersGivingWrongMovesMiddleOfGame(playersCountWithMovesMap, playerName);
 		} else if (playersCountWithMovesMap.size() == 1 && playersCountWithMovesMap.containsKey(playerName)) {
 			log.error("--:Player-{} taking continuous turn wrongly:--", playerName);
 			return Boolean.FALSE;
@@ -62,29 +52,26 @@ public class GameBoardChecker {
 	public Player findWinner(Map<String, String> currentStateOfGameBoard) {
 		String winner = checkWinningPossibility(currentStateOfGameBoard);
 		Player playerWinner;
-		if (winner != null) {
-			switch (winner) {
-			case PLAYER_X:
-				playerWinner = new Player();
-				playerWinner.setId(winner);
-				playerWinner.setDescription(PLAYER_DESCRIPTION_X);
-				break;
-			case PLAYER_O:
-				playerWinner = new Player();
-				playerWinner.setId(winner);
-				playerWinner.setDescription(PLAYER_DESCRIPTION_O);
-				break;
-			case GAME_DRAW:
-				playerWinner = new Player();
-				playerWinner.setId(GAME_DRAW);
-				playerWinner.setDescription(GAME_DRAW_DESCRIPTION);
-				break;
-			default:
-				playerWinner = null;
-			}
-			return playerWinner;
+		switch (winner) {
+		case PLAYER_X:
+			playerWinner = new Player();
+			playerWinner.setId(winner);
+			playerWinner.setDescription(PLAYER_DESCRIPTION_X);
+			break;
+		case PLAYER_O:
+			playerWinner = new Player();
+			playerWinner.setId(winner);
+			playerWinner.setDescription(PLAYER_DESCRIPTION_O);
+			break;
+		case GAME_DRAW:
+			playerWinner = new Player();
+			playerWinner.setId(GAME_DRAW);
+			playerWinner.setDescription(GAME_DRAW_DESCRIPTION);
+			break;
+		default:
+			playerWinner = null;
 		}
-		return null;
+		return playerWinner;
 	}
 
 	public String checkWinningPossibility(Map<String, String> gameBoard) {
@@ -137,7 +124,7 @@ public class GameBoardChecker {
 			return GAME_DRAW;
 		}
 
-		return null;
+		return "";
 	}
 
 	public boolean isGameDraw(Map<String, String> gameBoard) {
@@ -158,5 +145,19 @@ public class GameBoardChecker {
 		defaultNewGameStartBoard.put(POSITION_EIGHT_ON_GAME_BOARD, null);
 		defaultNewGameStartBoard.put(POSITION_NINE_ON_GAME_BOARD, null);
 		return defaultNewGameStartBoard;
+	}
+
+	public boolean playersGivingWrongMovesMiddleOfGame(Map<String, Long> playersCountWithMovesMap, String playerName) {
+		long firstPlayerOccupencyCount = playersCountWithMovesMap.get(PLAYER_X);
+		long secondPlayerOccupencyCount = playersCountWithMovesMap.get(PLAYER_O);
+		long difference = firstPlayerOccupencyCount > secondPlayerOccupencyCount
+				? firstPlayerOccupencyCount - secondPlayerOccupencyCount
+				: secondPlayerOccupencyCount - firstPlayerOccupencyCount;
+		if (difference > 0 && ((firstPlayerOccupencyCount > secondPlayerOccupencyCount && PLAYER_X.equals(playerName))
+				|| (secondPlayerOccupencyCount > firstPlayerOccupencyCount && PLAYER_O.equals(playerName)))) {
+			log.info("--:Player-{} has taken wrong turn:--", playerName);
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
 	}
 }
