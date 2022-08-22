@@ -1,6 +1,8 @@
 package com.tictactoe.app.service;
 
 import static com.tictactoe.app.utility.ConstantUtility.MESSAGE;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_EIGHT_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_FIVE_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_FOUR_ON_GAME_BOARD;
@@ -10,8 +12,7 @@ import static com.tictactoe.app.utility.ConstantUtility.POSITION_SEVEN_ON_GAME_B
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_SIX_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_THREE_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -90,9 +91,12 @@ public class GameStateService implements TictactoeApiDelegate {
 		if (playerWiseMovesCountMap.size() == 2) {
 			long firstPlayerOccupencyCount = playerWiseMovesCountMap.get(PLAYER_X);
 			long secondPlayerOccupencyCount = playerWiseMovesCountMap.get(PLAYER_O);
-			long difference = firstPlayerOccupencyCount - secondPlayerOccupencyCount;
-			if (difference > 0
-					&& (firstPlayerOccupencyCount > secondPlayerOccupencyCount && PLAYER_X.equals(playerName))) {
+			long difference = firstPlayerOccupencyCount > secondPlayerOccupencyCount
+					? firstPlayerOccupencyCount - secondPlayerOccupencyCount
+					: secondPlayerOccupencyCount - firstPlayerOccupencyCount;
+			if (difference > 0 && ((firstPlayerOccupencyCount > secondPlayerOccupencyCount
+					&& PLAYER_X.equals(playerName))
+					|| (secondPlayerOccupencyCount > firstPlayerOccupencyCount && PLAYER_O.equals(playerName)))) {
 				log.info("--:Player-{} has taken wrong turn:--", playerName);
 				return Boolean.FALSE;
 			}

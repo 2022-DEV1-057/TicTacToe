@@ -123,6 +123,22 @@ class GameStateServiceTest {
 		mockMvc.perform(requestBuilder).andExpect(status().is(400));
 	}
 
+	@Test
+	public void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerO() throws Exception {
+		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
+		exisitngGameBoard.put("1", PLAYER_X);
+		exisitngGameBoard.put("2", PLAYER_O);
+		exisitngGameBoard.put("3", PLAYER_X);
+		exisitngGameBoard.put("4", PLAYER_O);
+		exisitngGameBoard.put("6", PLAYER_O);
+		gameStateService.setGameBoard(exisitngGameBoard);
+		ObjectWriter ow = new ObjectMapper().writer();
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 5));
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
+				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
+		mockMvc.perform(requestBuilder).andExpect(status().is(400));
+	}
+
 	public Map<String, String> getDefaultGameBoard() {
 		Map<String, String> defaultGameBoard = new HashMap<>();
 		defaultGameBoard.put(POSITION_ONE_ON_GAME_BOARD, null);
