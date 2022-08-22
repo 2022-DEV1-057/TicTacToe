@@ -15,4 +15,8 @@ public class ConstantUtility {
 	public static final String POSITION_SEVEN_ON_GAME_BOARD = "7";
 	public static final String POSITION_EIGHT_ON_GAME_BOARD = "8";
 	public static final String POSITION_NINE_ON_GAME_BOARD = "9";
+
+	private ConstantUtility() {
+
+	}
 }

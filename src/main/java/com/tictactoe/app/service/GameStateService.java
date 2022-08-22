@@ -48,12 +48,12 @@ public class GameStateService implements TictactoeApiDelegate {
 	public ResponseEntity<TurnResponse> playerTurn(TurnRequest turnRequest) {
 		log.info("--: Executing player move :--");
 		if (!stoppingSamePlayerTakingContinuousTurns(turnRequest.getPlayerId(), gameBoard)) {
-			return new ResponseEntity<TurnResponse>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		if (getCurrentlyPlayingGameBoard().get(String.valueOf(turnRequest.getPosition())) != null) {
 			log.error("--:Player-{} trying wrong move, occupied position/slot not allowed:--",
 					turnRequest.getPlayerId());
-			return new ResponseEntity<TurnResponse>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		getCurrentlyPlayingGameBoard().put(String.valueOf(turnRequest.getPosition()), turnRequest.getPlayerId());
 		TurnResponse turnResponse = new TurnResponse();
@@ -85,12 +85,12 @@ public class GameStateService implements TictactoeApiDelegate {
 
 	public boolean stoppingSamePlayerTakingContinuousTurns(String playerName, Map<String, String> gameBoard) {
 		log.info("--:Validating any player taking continuous turns:--");
-		Map<String, Long> playerWiseMovesCountMap = gameBoard.values().stream().filter(Objects::nonNull)
+		Map<String, Long> playersCountWithMovesMap = gameBoard.values().stream().filter(Objects::nonNull)
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-		if (playerWiseMovesCountMap.size() == 2) {
-			long firstPlayerOccupencyCount = playerWiseMovesCountMap.get(PLAYER_X);
-			long secondPlayerOccupencyCount = playerWiseMovesCountMap.get(PLAYER_O);
+		if (playersCountWithMovesMap.size() == 2) {
+			long firstPlayerOccupencyCount = playersCountWithMovesMap.get(PLAYER_X);
+			long secondPlayerOccupencyCount = playersCountWithMovesMap.get(PLAYER_O);
 			long difference = firstPlayerOccupencyCount > secondPlayerOccupencyCount
 					? firstPlayerOccupencyCount - secondPlayerOccupencyCount
 					: secondPlayerOccupencyCount - firstPlayerOccupencyCount;
@@ -100,7 +100,7 @@ public class GameStateService implements TictactoeApiDelegate {
 				log.info("--:Player-{} has taken wrong turn:--", playerName);
 				return Boolean.FALSE;
 			}
-		} else if (playerWiseMovesCountMap.size() == 1 && playerWiseMovesCountMap.containsKey(playerName)) {
+		} else if (playersCountWithMovesMap.size() == 1 && playersCountWithMovesMap.containsKey(playerName)) {
 			log.error("--:Player-{} taking continuous turn wrongly:--", playerName);
 			return Boolean.FALSE;
 		}
