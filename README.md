@@ -134,4 +134,20 @@ This RESTful service is available to play tictactoe game with below endpoints.
         "9": "X"
     }
     }
+   	 Current state of game board : Its a GET request with no input, below is the example.
+
+    HTTP GET Request URL: http://localhost:9090/tictactoe/stateOfGameBoard
+    
+    Response example Json: 
+       {
+	        "1": X,
+	        "2": null,
+	        "3": null,
+	        "4": O,
+	        "5": null,
+	        "6": X,
+	        "7": null,
+	        "8": O,
+	        "9": null
+	    }
    	
