@@ -13,6 +13,10 @@ import static com.tictactoe.app.utility.ConstantUtility.POSITION_SEVEN_ON_GAME_B
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_SIX_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_THREE_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.WIN_LINE_PLAYER_O;
+import static com.tictactoe.app.utility.ConstantUtility.WIN_LINE_PLAYER_X;
+import static com.tictactoe.app.utility.ConstantUtility.GAME_DRAW;
+import static com.tictactoe.app.utility.ConstantUtility.GAME_DRAW_DESCRIPTION;
 
 import java.util.Map;
 import java.util.Objects;
@@ -69,10 +73,10 @@ public class GameBoardChecker {
 				playerWinner.setId(winner);
 				playerWinner.setDescription(PLAYER_DESCRIPTION_O);
 				break;
-			case "draw":
+			case GAME_DRAW:
 				playerWinner = new Player();
-				playerWinner.setId("draw");
-				playerWinner.setDescription("No one wins, Its a tie!");
+				playerWinner.setId(GAME_DRAW);
+				playerWinner.setDescription(GAME_DRAW_DESCRIPTION);
 				break;
 			default:
 				playerWinner = null;
@@ -122,14 +126,14 @@ public class GameBoardChecker {
 			default:
 				break;
 			}
-			if ("XXX".equals(winLine)) {
+			if (WIN_LINE_PLAYER_X.equals(winLine)) {
 				return PLAYER_X;
-			} else if ("OOO".equals(winLine)) {
+			} else if (WIN_LINE_PLAYER_O.equals(winLine)) {
 				return PLAYER_O;
 			}
 		}
 		if (isGameDraw(gameBoard)) {
-			return "draw";
+			return GAME_DRAW;
 		}
 
 		return null;

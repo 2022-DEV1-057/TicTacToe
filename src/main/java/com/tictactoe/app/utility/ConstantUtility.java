@@ -5,6 +5,10 @@ public class ConstantUtility {
 	public static final String PLAYER_X = "X";
 	public static final String PLAYER_O = "O";
 	public static final String PLAYER_DESCRIPTION_X = "Player X";
+	public static final String WIN_LINE_PLAYER_X = "XXX";
+	public static final String WIN_LINE_PLAYER_O = "OOO";
+	public static final String GAME_DRAW = "draw";
+	public static final String GAME_DRAW_DESCRIPTION = "No one wins, Its a tie!";
 	public static final String PLAYER_DESCRIPTION_O = "Player O";
 	public static final String POSITION_ONE_ON_GAME_BOARD = "1";
 	public static final String POSITION_TWO_ON_GAME_BOARD = "2";
