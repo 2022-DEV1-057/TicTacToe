@@ -1,5 +1,7 @@
 package com.tictactoe.app.service;
 
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,6 +33,7 @@ import com.tictactoe.app.openapi.model.TurnResponse;
 @AutoConfigureMockMvc
 class GameStateServiceTest {
 	private static final String START_NEW_GAME_ENDPOINT = "/tictactoe/startNewGame";
+	private static final String PLAYER_TURN_ENDPOINT = "/tictactoe/playerTurn";
 	@Autowired
 	private MockMvc mockMvc;
 	@Autowired
@@ -61,11 +64,11 @@ class GameStateServiceTest {
 		Map<String, String> expectedGameBoard = getDefaultGameBoard();
 		gameStateService.setGameBoard(expectedGameBoard);
 		TurnRequest inputTurnRequest = new TurnRequest();
-		inputTurnRequest.setPlayerId("X");
+		inputTurnRequest.setPlayerId(PLAYER_X);
 		inputTurnRequest.setPosition(1);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(inputTurnRequest);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/tictactoe/playerTurn")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse responseActual = result.getResponse();
@@ -77,14 +80,14 @@ class GameStateServiceTest {
 	@Test
 	public void ShouldNotUpdateSamePosition() throws Exception {
 		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
-		exisitngGameBoard.put("1", "X");
+		exisitngGameBoard.put("1", PLAYER_X);
 		gameStateService.setGameBoard(exisitngGameBoard);
 		TurnRequest inputTurnRequest = new TurnRequest();
-		inputTurnRequest.setPlayerId("O");
+		inputTurnRequest.setPlayerId(PLAYER_O);
 		inputTurnRequest.setPosition(1);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(inputTurnRequest);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/tictactoe/playerTurn")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		mockMvc.perform(requestBuilder).andExpect(status().is(400));
 	}
@@ -92,14 +95,14 @@ class GameStateServiceTest {
 	@Test
 	public void SamePlayerShouldNotTakeContinuousTurns() throws Exception {
 		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
-		exisitngGameBoard.put("1", "O");
+		exisitngGameBoard.put("1", PLAYER_O);
 		gameStateService.setGameBoard(exisitngGameBoard);
 		TurnRequest inputTurnRequest = new TurnRequest();
-		inputTurnRequest.setPlayerId("O");
+		inputTurnRequest.setPlayerId(PLAYER_O);
 		inputTurnRequest.setPosition(1);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(inputTurnRequest);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/tictactoe/playerTurn")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		mockMvc.perform(requestBuilder).andExpect(status().is(400));
 	}
