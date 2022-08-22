@@ -74,7 +74,7 @@ This RESTful service is available to play tictactoe game with below endpoints.
     ]
  Player Turn : Its a PATCH request to update player move on game board. Input body is json format message as below example.
 
-	HTTP PATCH Request URL: http://localhost:8080/tictactoe/playerTurn
+	HTTP PATCH Request URL: http://localhost:9090/tictactoe/playerTurn
 	
 	Request example Json: 
 	{
