@@ -14,9 +14,13 @@ import com.tictactoe.app.openapi.model.Player;
 public class PlayerService implements TictactoePlayersApiDelegate {
 	@Override
 	public ResponseEntity<List<Player>> getPlayersInfo() {
-		Player playerOne = new Player();
-		Player playerTwo = new Player();
 		List<Player> playerList = new ArrayList<>();
+		Player playerOne = new Player();
+		playerOne.setId("X");
+		playerOne.setDescription("Player X");
+		Player playerTwo = new Player();
+		playerTwo.setId("O");
+		playerTwo.setDescription("Player O");
 		playerList.add(playerOne);
 		playerList.add(playerTwo);
 		return new ResponseEntity<>(playerList, HttpStatus.OK);

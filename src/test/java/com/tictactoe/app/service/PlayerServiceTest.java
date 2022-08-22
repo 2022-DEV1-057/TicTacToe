@@ -38,4 +38,13 @@ class PlayerServiceTest {
 		List<Player> playerList = objectMapper.readValue(responseBody, List.class);
 		assertEquals(2, playerList.size());
 	}
+
+	@Test
+	void checkPlayersInformation() throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/tictactoe-players/info");
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		String responseBody = result.getResponse().getContentAsString();
+		assertEquals("[{\"id\":\"X\",\"description\":\"Player X\"},{\"id\":\"O\",\"description\":\"Player O\"}]",
+				responseBody);
+	}
 }
