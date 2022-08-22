@@ -31,6 +31,7 @@ public class GameStateService implements TictactoeApiDelegate {
 
 	private static Logger log = LoggerFactory.getLogger(GameStateService.class);
 	private Map<String, String> gameBoard = new HashMap<>();
+	private boolean isGameEnd = Boolean.FALSE;
 	@Autowired
 	private GameBoardChecker gameBoardChecker;
 
@@ -45,6 +46,14 @@ public class GameStateService implements TictactoeApiDelegate {
 	@Override
 	public ResponseEntity<TurnResponse> playerTurn(TurnRequest turnRequest) {
 		log.info("--: Executing player move :--");
+		if (Boolean.TRUE.equals(checkingGameOverAlready())) {
+			log.info("--:Hi Player-{}, Game over already:--", turnRequest.getPlayerId());
+			TurnResponse turnResponse = new TurnResponse();
+			turnResponse.setGameOver(Boolean.TRUE);
+			turnResponse.setState(getCurrentlyPlayingGameBoard());
+			turnResponse.setWinner(gameBoardChecker.findWinner(getCurrentlyPlayingGameBoard()));
+			return new ResponseEntity<>(turnResponse, HttpStatus.OK);
+		}
 		if (!gameBoardChecker.stoppingSamePlayerTakingContinuousTurns(turnRequest.getPlayerId(), gameBoard)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -57,6 +66,7 @@ public class GameStateService implements TictactoeApiDelegate {
 		TurnResponse turnResponse = new TurnResponse();
 		turnResponse.setState(getCurrentlyPlayingGameBoard());
 		turnResponse.setWinner(gameBoardChecker.findWinner(getCurrentlyPlayingGameBoard()));
+		turnResponse.setGameOver(Boolean.FALSE);
 		return new ResponseEntity<>(turnResponse, HttpStatus.OK);
 	}
 
@@ -80,6 +90,14 @@ public class GameStateService implements TictactoeApiDelegate {
 
 	public void setGameBoard(Map<String, String> gameBoard) {
 		this.gameBoard = gameBoard;
+	}
+
+	public boolean checkingGameOverAlready() {
+		return this.isGameEnd;
+	}
+
+	public void endTheGame(Boolean isGameOVer) {
+		this.isGameEnd = isGameOVer;
 	}
 
 }

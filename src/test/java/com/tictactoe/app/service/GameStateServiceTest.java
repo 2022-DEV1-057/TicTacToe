@@ -262,6 +262,32 @@ class GameStateServiceTest {
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
+	@Test
+	void checkGameEnded() throws Exception {
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_THREE_ON_GAME_BOARD, PLAYER_O);
+		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.TRUE);
+		ObjectWriter ow = new ObjectMapper().writer();
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 7));
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
+				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		MockHttpServletResponse responseActual = result.getResponse();
+		Player expectedwinner = new Player();
+		expectedwinner.setId(PLAYER_O);
+		expectedwinner.setDescription(PLAYER_DESCRIPTION_O);
+		TurnResponse expectedResponse = new TurnResponse();
+		expectedResponse.setState(existingGameBoard);
+		expectedResponse.setWinner(expectedwinner);
+		expectedResponse.setGameOver(Boolean.TRUE);
+		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
+	}
+
 	public Map<String, String> getDefaultGameBoard() {
 		Map<String, String> defaultGameBoard = new HashMap<>();
 		defaultGameBoard.put(POSITION_ONE_ON_GAME_BOARD, null);
