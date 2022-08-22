@@ -12,10 +12,17 @@ import com.tictactoe.app.openapi.model.NewGameInfo;
 
 @Service
 public class GameStateService implements TictactoeApiDelegate {
+	private static final String MESSAGE = "Hello Mr.X and Mr.O your game started!,All the best and enjoy playing";
 
 	@Override
 	public ResponseEntity<NewGameInfo> startNewGame() {
-		NewGameInfo newGameInfo= new NewGameInfo();
+		NewGameInfo newGameInfo = new NewGameInfo();
+		newGameInfo.setGameboard(getInitialGameBoardOnNewGameStartUp());
+		newGameInfo.message(MESSAGE);
+		return new ResponseEntity<>(newGameInfo, HttpStatus.CREATED);
+	}
+
+	private static Map<String, String> getInitialGameBoardOnNewGameStartUp() {
 		Map<String, String> gameBoard = new HashMap<>();
 		gameBoard.put("1", null);
 		gameBoard.put("2", null);
@@ -26,8 +33,6 @@ public class GameStateService implements TictactoeApiDelegate {
 		gameBoard.put("7", null);
 		gameBoard.put("8", null);
 		gameBoard.put("9", null);
-		newGameInfo.setGameboard(gameBoard);
-		newGameInfo.message("Hello Mr.X and Mr.O your game started!,All the best and enjoy playing");
-		return new ResponseEntity<>(newGameInfo, HttpStatus.CREATED);
+		return gameBoard;
 	}
 }
