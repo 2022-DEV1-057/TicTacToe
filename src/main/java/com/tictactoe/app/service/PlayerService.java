@@ -1,5 +1,10 @@
 package com.tictactoe.app.service;
 
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_O;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_X;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +17,9 @@ import com.tictactoe.app.openapi.model.Player;
 
 @Service
 public class PlayerService implements TictactoePlayersApiDelegate {
-	private static final String PLAYER_X = "X";
-	private static final String PLAYER_O = "O";
-	private static final String PLAYER_DESCRIPTION_X = "Player X";
-	private static final String PLAYER_DESCRIPTION_O = "Player O";
 
 	@Override
 	public ResponseEntity<List<Player>> getPlayersInfo() {
-
 		return new ResponseEntity<>(getPlayingTeamInformationList(), HttpStatus.OK);
 	}
 

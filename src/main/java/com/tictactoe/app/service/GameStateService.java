@@ -1,5 +1,16 @@
 package com.tictactoe.app.service;
 
+import static com.tictactoe.app.utility.ConstantUtility.MESSAGE;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_EIGHT_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_FIVE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_FOUR_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_NINE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_ONE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_SEVEN_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_SIX_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_THREE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOARD;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +23,6 @@ import com.tictactoe.app.openapi.model.NewGameInfo;
 
 @Service
 public class GameStateService implements TictactoeApiDelegate {
-	private static final String MESSAGE = "Hello Mr.X and Mr.O your game started!,All the best and enjoy playing";
 
 	@Override
 	public ResponseEntity<NewGameInfo> startNewGame() {
@@ -24,15 +34,15 @@ public class GameStateService implements TictactoeApiDelegate {
 
 	private static Map<String, String> getInitialGameBoardOnNewGameStartUp() {
 		Map<String, String> gameBoard = new HashMap<>();
-		gameBoard.put("1", null);
-		gameBoard.put("2", null);
-		gameBoard.put("3", null);
-		gameBoard.put("4", null);
-		gameBoard.put("5", null);
-		gameBoard.put("6", null);
-		gameBoard.put("7", null);
-		gameBoard.put("8", null);
-		gameBoard.put("9", null);
+		gameBoard.put(POSITION_ONE_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_TWO_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_THREE_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_FOUR_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_FIVE_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_SIX_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_SEVEN_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_EIGHT_ON_GAME_BOARD, null);
+		gameBoard.put(POSITION_NINE_ON_GAME_BOARD, null);
 		return gameBoard;
 	}
 }
