@@ -96,12 +96,28 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void SamePlayerShouldNotTakeContinuousTurns() throws Exception {
+	public void SamePlayerShouldNotTakeContinuousTurnsOnStartUp() throws Exception {
 		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
 		exisitngGameBoard.put("1", PLAYER_O);
 		gameStateService.setGameBoard(exisitngGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 1));
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
+				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
+		mockMvc.perform(requestBuilder).andExpect(status().is(400));
+	}
+
+	@Test
+	public void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerX() throws Exception {
+		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
+		exisitngGameBoard.put("1", PLAYER_O);
+		exisitngGameBoard.put("2", PLAYER_X);
+		exisitngGameBoard.put("3", PLAYER_O);
+		exisitngGameBoard.put("4", PLAYER_X);
+		exisitngGameBoard.put("6", PLAYER_X);
+		gameStateService.setGameBoard(exisitngGameBoard);
+		ObjectWriter ow = new ObjectMapper().writer();
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 5));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		mockMvc.perform(requestBuilder).andExpect(status().is(400));

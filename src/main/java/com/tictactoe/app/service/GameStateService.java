@@ -10,7 +10,8 @@ import static com.tictactoe.app.utility.ConstantUtility.POSITION_SEVEN_ON_GAME_B
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_SIX_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_THREE_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOARD;
-
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,7 +33,6 @@ import com.tictactoe.app.openapi.model.TurnResponse;
 public class GameStateService implements TictactoeApiDelegate {
 
 	private static Logger log = LoggerFactory.getLogger(GameStateService.class);
-
 	private Map<String, String> gameBoard = new HashMap<>();
 
 	@Override
@@ -86,7 +86,17 @@ public class GameStateService implements TictactoeApiDelegate {
 		log.info("--:Validating any player taking continuous turns:--");
 		Map<String, Long> playerWiseMovesCountMap = gameBoard.values().stream().filter(Objects::nonNull)
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-		if (playerWiseMovesCountMap.size() == 1 && playerWiseMovesCountMap.containsKey(playerName)) {
+
+		if (playerWiseMovesCountMap.size() == 2) {
+			long firstPlayerOccupencyCount = playerWiseMovesCountMap.get(PLAYER_X);
+			long secondPlayerOccupencyCount = playerWiseMovesCountMap.get(PLAYER_O);
+			long difference = firstPlayerOccupencyCount - secondPlayerOccupencyCount;
+			if (difference > 0
+					&& (firstPlayerOccupencyCount > secondPlayerOccupencyCount && PLAYER_X.equals(playerName))) {
+				log.info("--:Player-{} has taken wrong turn:--", playerName);
+				return Boolean.FALSE;
+			}
+		} else if (playerWiseMovesCountMap.size() == 1 && playerWiseMovesCountMap.containsKey(playerName)) {
 			log.error("--:Player-{} taking continuous turn wrongly:--", playerName);
 			return Boolean.FALSE;
 		}
