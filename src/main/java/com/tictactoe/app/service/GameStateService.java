@@ -13,6 +13,9 @@ import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOA
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +46,9 @@ public class GameStateService implements TictactoeApiDelegate {
 	@Override
 	public ResponseEntity<TurnResponse> playerTurn(TurnRequest turnRequest) {
 		log.info("--: Executing player move :--");
+		if (!stoppingSamePlayerTakingContinuousTurns(turnRequest.getPlayerId(), gameBoard)) {
+			return new ResponseEntity<TurnResponse>(HttpStatus.BAD_REQUEST);
+		}
 		if (getCurrentlyPlayingGameBoard().get(String.valueOf(turnRequest.getPosition())) != null) {
 			log.error("--:Player-{} trying wrong move, occupied position/slot not allowed:--",
 					turnRequest.getPlayerId());
@@ -74,6 +80,18 @@ public class GameStateService implements TictactoeApiDelegate {
 
 	public void setGameBoard(Map<String, String> gameBoard) {
 		this.gameBoard = gameBoard;
+	}
+
+	public boolean stoppingSamePlayerTakingContinuousTurns(String playerName, Map<String, String> gameBoard) {
+		log.info("--:Validating any player taking continuous turns:--");
+		Map<String, Long> playerWiseMovesCountMap = gameBoard.values().stream().filter(Objects::nonNull)
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+		if (playerWiseMovesCountMap.size() == 1 && playerWiseMovesCountMap.containsKey(playerName)) {
+			log.error("--:Player-{} taking continuous turn wrongly:--", playerName);
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
+
 	}
 
 }
