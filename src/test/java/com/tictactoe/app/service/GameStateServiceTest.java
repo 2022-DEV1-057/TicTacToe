@@ -1,5 +1,7 @@
 package com.tictactoe.app.service;
 
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_O;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_X;
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_EIGHT_ON_GAME_BOARD;
@@ -38,8 +40,6 @@ import com.tictactoe.app.openapi.model.NewGameInfo;
 import com.tictactoe.app.openapi.model.Player;
 import com.tictactoe.app.openapi.model.TurnRequest;
 import com.tictactoe.app.openapi.model.TurnResponse;
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_X;
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_O;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -88,9 +88,9 @@ class GameStateServiceTest {
 
 	@Test
 	public void ShouldNotUpdateSamePosition() throws Exception {
-		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
-		exisitngGameBoard.put("1", PLAYER_X);
-		gameStateService.setGameBoard(exisitngGameBoard);
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_X);
+		gameStateService.setGameBoard(existingGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -100,9 +100,9 @@ class GameStateServiceTest {
 
 	@Test
 	public void SamePlayerShouldNotTakeContinuousTurnsOnStartUp() throws Exception {
-		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
-		exisitngGameBoard.put("1", PLAYER_O);
-		gameStateService.setGameBoard(exisitngGameBoard);
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
+		gameStateService.setGameBoard(existingGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -112,13 +112,13 @@ class GameStateServiceTest {
 
 	@Test
 	public void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerX() throws Exception {
-		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
-		exisitngGameBoard.put("1", PLAYER_O);
-		exisitngGameBoard.put("2", PLAYER_X);
-		exisitngGameBoard.put("3", PLAYER_O);
-		exisitngGameBoard.put("4", PLAYER_X);
-		exisitngGameBoard.put("6", PLAYER_X);
-		gameStateService.setGameBoard(exisitngGameBoard);
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_THREE_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_SIX_ON_GAME_BOARD, PLAYER_X);
+		gameStateService.setGameBoard(existingGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 5));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -128,13 +128,13 @@ class GameStateServiceTest {
 
 	@Test
 	public void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerO() throws Exception {
-		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
-		exisitngGameBoard.put("1", PLAYER_X);
-		exisitngGameBoard.put("2", PLAYER_O);
-		exisitngGameBoard.put("3", PLAYER_X);
-		exisitngGameBoard.put("4", PLAYER_O);
-		exisitngGameBoard.put("6", PLAYER_O);
-		gameStateService.setGameBoard(exisitngGameBoard);
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_THREE_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_SIX_ON_GAME_BOARD, PLAYER_O);
+		gameStateService.setGameBoard(existingGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 5));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -145,10 +145,10 @@ class GameStateServiceTest {
 	@Test
 	public void checkHorizontalWinningToPlayerX() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
-		existingGameBoard.put("1", "X");
-		existingGameBoard.put("4", "O");
-		existingGameBoard.put("2", "X");
-		existingGameBoard.put("5", "O");
+		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, PLAYER_O);
 		gameStateService.setGameBoard(existingGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 3));
@@ -168,10 +168,10 @@ class GameStateServiceTest {
 	@Test
 	public void checkHorizontalWinningToPlayerO() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
-		existingGameBoard.put("1", "O");
-		existingGameBoard.put("4", "X");
-		existingGameBoard.put("2", "O");
-		existingGameBoard.put("5", "X");
+		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_X);
+		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_O);
+		existingGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, PLAYER_X);
 		gameStateService.setGameBoard(existingGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 3));
