@@ -37,7 +37,7 @@ Commmandline : First , execute mvn clean compile  then execute following command
 This RESTful service is available to play tictactoe game with below endpoints.
 
 
- Start new game: Its a POST request with no input, below request creates the new game simply.
+ Start new game: Its a POST request with no input body, below request creates the new game simply.
 
     HTTP POST Request URL: http://localhost:9090/tictactoe/startNewGame
     
@@ -56,3 +56,20 @@ This RESTful service is available to play tictactoe game with below endpoints.
 	        "9": null
 	    }
     }
+   	
+ To see players information: Its a GET request with no input body, below is the example.
+
+    HTTP GET Request URL: http://localhost:9090/tictactoe-players/info
+    
+    Response example Json: 
+    [
+	    {
+	        "id": "X",
+	        "description": "PLAYER_X"
+	    },
+	    {
+	        "id": "O",
+	        "description": "PLAYER_O"
+	    }
+    ]
+   	
