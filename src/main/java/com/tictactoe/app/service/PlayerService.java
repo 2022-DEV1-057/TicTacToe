@@ -1,17 +1,12 @@
 package com.tictactoe.app.service;
 
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_O;
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_X;
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
-import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.tictactoe.app.dao.PlayerData;
 import com.tictactoe.app.openapi.api.TictactoePlayersApiDelegate;
 import com.tictactoe.app.openapi.model.Player;
 
@@ -20,20 +15,6 @@ public class PlayerService implements TictactoePlayersApiDelegate {
 
 	@Override
 	public ResponseEntity<List<Player>> getPlayersInfo() {
-		return new ResponseEntity<>(getPlayingTeamInformationList(), HttpStatus.OK);
-	}
-
-	private List<Player> getPlayingTeamInformationList() {
-		List<Player> playerList = new ArrayList<>();
-		Player playerX = new Player();
-		playerX.setId(PLAYER_X);
-		playerX.setDescription(PLAYER_DESCRIPTION_X);
-		Player playerO = new Player();
-		playerO.setId(PLAYER_O);
-		playerO.setDescription(PLAYER_DESCRIPTION_O);
-		playerList.add(playerX);
-		playerList.add(playerO);
-		return playerList;
-
+		return new ResponseEntity<>(PlayerData.getPlayingTeamInformationList(), HttpStatus.OK);
 	}
 }
