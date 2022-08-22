@@ -1,5 +1,7 @@
 package com.tictactoe.app.service;
 
+import static com.tictactoe.app.utility.ConstantUtility.GAME_DRAW;
+import static com.tictactoe.app.utility.ConstantUtility.GAME_DRAW_DESCRIPTION;
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_O;
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_X;
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
@@ -15,9 +17,8 @@ import static com.tictactoe.app.utility.ConstantUtility.POSITION_THREE_ON_GAME_B
 import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOARD;
 import static com.tictactoe.app.utility.ConstantUtility.WIN_LINE_PLAYER_O;
 import static com.tictactoe.app.utility.ConstantUtility.WIN_LINE_PLAYER_X;
-import static com.tictactoe.app.utility.ConstantUtility.GAME_DRAW;
-import static com.tictactoe.app.utility.ConstantUtility.GAME_DRAW_DESCRIPTION;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -145,4 +146,17 @@ public class GameBoardChecker {
 		return movesCountWithNoWinng == 9;
 	}
 
+	public Map<String, String> getInitialGameBoardOnNewGameStartUp() {
+		Map<String, String> defaultNewGameStartBoard = new HashMap<>();
+		defaultNewGameStartBoard.put(POSITION_ONE_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_TWO_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_THREE_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_FOUR_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_FIVE_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_SIX_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_SEVEN_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_EIGHT_ON_GAME_BOARD, null);
+		defaultNewGameStartBoard.put(POSITION_NINE_ON_GAME_BOARD, null);
+		return defaultNewGameStartBoard;
+	}
 }

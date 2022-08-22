@@ -1,15 +1,6 @@
 package com.tictactoe.app.service;
 
 import static com.tictactoe.app.utility.ConstantUtility.MESSAGE;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_EIGHT_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_FIVE_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_FOUR_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_NINE_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_ONE_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_SEVEN_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_SIX_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_THREE_ON_GAME_BOARD;
-import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOARD;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.tictactoe.app.openapi.api.TictactoeApiDelegate;
 import com.tictactoe.app.openapi.model.NewGameInfo;
+import com.tictactoe.app.openapi.model.Player;
 import com.tictactoe.app.openapi.model.TurnRequest;
 import com.tictactoe.app.openapi.model.TurnResponse;
 
@@ -48,11 +40,7 @@ public class GameStateService implements TictactoeApiDelegate {
 		log.info("--: Executing player move :--");
 		if (Boolean.TRUE.equals(checkingGameOverAlready())) {
 			log.info("--:Hi Player-{}, Game over already:--", turnRequest.getPlayerId());
-			TurnResponse turnResponse = new TurnResponse();
-			turnResponse.setGameOver(Boolean.TRUE);
-			turnResponse.setState(getCurrentlyPlayingGameBoard());
-			turnResponse.setWinner(gameBoardChecker.findWinner(getCurrentlyPlayingGameBoard()));
-			return new ResponseEntity<>(turnResponse, HttpStatus.OK);
+			return new ResponseEntity<>(preparePlayerTurnResponse(), HttpStatus.OK);
 		}
 		if (!gameBoardChecker.stoppingSamePlayerTakingContinuousTurns(turnRequest.getPlayerId(), gameBoard)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -63,25 +51,11 @@ public class GameStateService implements TictactoeApiDelegate {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		getCurrentlyPlayingGameBoard().put(String.valueOf(turnRequest.getPosition()), turnRequest.getPlayerId());
-		TurnResponse turnResponse = new TurnResponse();
-		turnResponse.setState(getCurrentlyPlayingGameBoard());
-		turnResponse.setWinner(gameBoardChecker.findWinner(getCurrentlyPlayingGameBoard()));
-		turnResponse.setGameOver(Boolean.FALSE);
-		return new ResponseEntity<>(turnResponse, HttpStatus.OK);
+		return new ResponseEntity<>(preparePlayerTurnResponse(), HttpStatus.OK);
 	}
 
 	private Map<String, String> getInitialGameBoardOnNewGameStartUp() {
-		this.gameBoard = new HashMap<>();
-		getCurrentlyPlayingGameBoard().put(POSITION_ONE_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_TWO_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_THREE_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_FOUR_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_FIVE_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_SIX_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_SEVEN_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_EIGHT_ON_GAME_BOARD, null);
-		getCurrentlyPlayingGameBoard().put(POSITION_NINE_ON_GAME_BOARD, null);
-		return getCurrentlyPlayingGameBoard();
+		return this.gameBoard = gameBoardChecker.getInitialGameBoardOnNewGameStartUp();
 	}
 
 	public Map<String, String> getCurrentlyPlayingGameBoard() {
@@ -99,5 +73,15 @@ public class GameStateService implements TictactoeApiDelegate {
 	public void endTheGame(Boolean isGameOVer) {
 		this.isGameEnd = isGameOVer;
 	}
-
+	public TurnResponse preparePlayerTurnResponse() {
+		TurnResponse turnResponse = new TurnResponse();
+		Player winner = gameBoardChecker.findWinner(getCurrentlyPlayingGameBoard());
+		if (winner != null) {
+			endTheGame(Boolean.TRUE);
+		}
+		turnResponse.setGameOver(checkingGameOverAlready());
+		turnResponse.setState(getCurrentlyPlayingGameBoard());
+		turnResponse.setWinner(winner);
+		return turnResponse;
+	}
 }

@@ -75,6 +75,7 @@ class GameStateServiceTest {
 	void updateFirstPlayerFirstMove() throws Exception {
 		Map<String, String> expectedGameBoard = getDefaultGameBoard();
 		gameStateService.setGameBoard(expectedGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -83,6 +84,7 @@ class GameStateServiceTest {
 		MockHttpServletResponse responseActual = result.getResponse();
 		TurnResponse expectedResponse = new TurnResponse();
 		expectedResponse.setState(expectedGameBoard);
+		expectedResponse.setGameOver(Boolean.FALSE);
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
@@ -91,6 +93,7 @@ class GameStateServiceTest {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_X);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -103,6 +106,7 @@ class GameStateServiceTest {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -119,6 +123,7 @@ class GameStateServiceTest {
 		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_X);
 		existingGameBoard.put(POSITION_SIX_ON_GAME_BOARD, PLAYER_X);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 5));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -135,6 +140,7 @@ class GameStateServiceTest {
 		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_O);
 		existingGameBoard.put(POSITION_SIX_ON_GAME_BOARD, PLAYER_O);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 5));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -150,6 +156,7 @@ class GameStateServiceTest {
 		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_X);
 		existingGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, PLAYER_O);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 3));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -162,6 +169,7 @@ class GameStateServiceTest {
 		TurnResponse expectedResponse = new TurnResponse();
 		expectedResponse.setState(existingGameBoard);
 		expectedResponse.setWinner(expectedwinner);
+		expectedResponse.setGameOver(Boolean.TRUE);
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
@@ -173,6 +181,7 @@ class GameStateServiceTest {
 		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_O);
 		existingGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, PLAYER_X);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 3));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -185,6 +194,7 @@ class GameStateServiceTest {
 		TurnResponse expectedResponse = new TurnResponse();
 		expectedResponse.setState(existingGameBoard);
 		expectedResponse.setWinner(expectedwinner);
+		expectedResponse.setGameOver(Boolean.TRUE);
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
@@ -196,6 +206,7 @@ class GameStateServiceTest {
 		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_X);
 		existingGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, PLAYER_O);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 7));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -208,6 +219,7 @@ class GameStateServiceTest {
 		TurnResponse expectedResponse = new TurnResponse();
 		expectedResponse.setState(existingGameBoard);
 		expectedResponse.setWinner(expectedwinner);
+		expectedResponse.setGameOver(Boolean.TRUE);
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
@@ -220,6 +232,7 @@ class GameStateServiceTest {
 		existingGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, PLAYER_O);
 		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_X);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 7));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -232,6 +245,7 @@ class GameStateServiceTest {
 		TurnResponse expectedResponse = new TurnResponse();
 		expectedResponse.setState(existingGameBoard);
 		expectedResponse.setWinner(expectedwinner);
+		expectedResponse.setGameOver(Boolean.TRUE);
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
@@ -247,6 +261,7 @@ class GameStateServiceTest {
 		existingGameBoard.put(POSITION_SIX_ON_GAME_BOARD, PLAYER_X);
 		existingGameBoard.put(POSITION_NINE_ON_GAME_BOARD, PLAYER_O);
 		gameStateService.setGameBoard(existingGameBoard);
+		gameStateService.endTheGame(Boolean.FALSE);
 		ObjectWriter ow = new ObjectMapper().writer();
 		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 8));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
@@ -259,6 +274,7 @@ class GameStateServiceTest {
 		TurnResponse expectedResponse = new TurnResponse();
 		expectedResponse.setState(existingGameBoard);
 		expectedResponse.setWinner(expectedwinner);
+		expectedResponse.setGameOver(Boolean.TRUE);
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
