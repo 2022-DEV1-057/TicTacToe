@@ -32,6 +32,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Player'
+  /tictactoe/playerTurn:
+    patch:
+      tags:
+        - tic-tac-toe-controller
+      operationId: playerTurn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TurnRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TurnResponse'                  
 
 components:
   schemas:
@@ -51,4 +69,23 @@ components:
           type: string
         description:
           type: string
+    TurnRequest:
+      type: object
+      properties:
+        playerId:
+          type: string
+        position:
+          type: integer
+          format: int32
+    TurnResponse:
+      type: object
+      properties:
+        gameOver:
+          type: boolean
+        winner:
+          $ref: '#/components/schemas/Player'
+        state:
+          type: object
+          additionalProperties:
+            type: string
             
