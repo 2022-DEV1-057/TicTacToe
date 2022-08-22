@@ -94,6 +94,18 @@ public class GameBoardChecker {
 				winLine = gameBoard.get(POSITION_SEVEN_ON_GAME_BOARD) + gameBoard.get(POSITION_EIGHT_ON_GAME_BOARD)
 						+ gameBoard.get(POSITION_NINE_ON_GAME_BOARD);
 				break;
+			case 3:
+				winLine = gameBoard.get(POSITION_ONE_ON_GAME_BOARD) + gameBoard.get(POSITION_FOUR_ON_GAME_BOARD)
+						+ gameBoard.get(POSITION_SEVEN_ON_GAME_BOARD);
+				break;
+			case 4:
+				winLine = gameBoard.get(POSITION_TWO_ON_GAME_BOARD) + gameBoard.get(POSITION_FIVE_ON_GAME_BOARD)
+						+ gameBoard.get(POSITION_EIGHT_ON_GAME_BOARD);
+				break;
+			case 5:
+				winLine = gameBoard.get(POSITION_THREE_ON_GAME_BOARD) + gameBoard.get(POSITION_SIX_ON_GAME_BOARD)
+						+ gameBoard.get(POSITION_NINE_ON_GAME_BOARD);
+				break;
 			default:
 				break;
 			}
