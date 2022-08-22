@@ -69,6 +69,11 @@ public class GameBoardChecker {
 				playerWinner.setId(winner);
 				playerWinner.setDescription(PLAYER_DESCRIPTION_O);
 				break;
+			case "draw":
+				playerWinner = new Player();
+				playerWinner.setId("draw");
+				playerWinner.setDescription("No one wins, Its a tie!");
+				break;
 			default:
 				playerWinner = null;
 			}
@@ -123,7 +128,17 @@ public class GameBoardChecker {
 				return PLAYER_O;
 			}
 		}
+		if (isGameDraw(gameBoard)) {
+			return "draw";
+		}
+
 		return null;
+	}
+
+	public boolean isGameDraw(Map<String, String> gameBoard) {
+		int movesCountWithNoWinng = gameBoard.values().stream().filter(Objects::nonNull).collect(Collectors.toList())
+				.size();
+		return movesCountWithNoWinng == 9;
 	}
 
 }
