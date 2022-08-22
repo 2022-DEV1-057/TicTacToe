@@ -35,8 +35,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.tictactoe.app.openapi.model.NewGameInfo;
+import com.tictactoe.app.openapi.model.Player;
 import com.tictactoe.app.openapi.model.TurnRequest;
 import com.tictactoe.app.openapi.model.TurnResponse;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_X;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -137,6 +139,29 @@ class GameStateServiceTest {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		mockMvc.perform(requestBuilder).andExpect(status().is(400));
+	}
+
+	@Test
+	public void checkHorizontalWinningToPlayerX() throws Exception {
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		existingGameBoard.put("1", "X");
+		existingGameBoard.put("4", "O");
+		existingGameBoard.put("2", "X");
+		existingGameBoard.put("5", "O");
+		gameStateService.setGameBoard(existingGameBoard);
+		ObjectWriter ow = new ObjectMapper().writer();
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 3));
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
+				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		MockHttpServletResponse responseActual = result.getResponse();
+		Player expectedwinner = new Player();
+		expectedwinner.setId(PLAYER_X);
+		expectedwinner.setDescription(PLAYER_DESCRIPTION_X);
+		TurnResponse expectedResponse = new TurnResponse();
+		expectedResponse.setState(existingGameBoard);
+		expectedResponse.setWinner(expectedwinner);
+		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
 	public Map<String, String> getDefaultGameBoard() {
