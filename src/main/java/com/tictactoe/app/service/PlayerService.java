@@ -12,22 +12,28 @@ import com.tictactoe.app.openapi.model.Player;
 
 @Service
 public class PlayerService implements TictactoePlayersApiDelegate {
-	public static final String PLAYER_X = "X";
-	public static final String PLAYER_O = "O";
-	public static final String PLAYER_ONE = "Player X";
-	public static final String PLAYER_TWO = "Player O";
+	private static final String PLAYER_X = "X";
+	private static final String PLAYER_O = "O";
+	private static final String PLAYER_ONE = "Player X";
+	private static final String PLAYER_TWO = "Player O";
 
 	@Override
 	public ResponseEntity<List<Player>> getPlayersInfo() {
+
+		return new ResponseEntity<>(getPlayingTeamInformationList(), HttpStatus.OK);
+	}
+
+	private List<Player> getPlayingTeamInformationList() {
 		List<Player> playerList = new ArrayList<>();
-		Player playerOne = new Player();
-		playerOne.setId(PLAYER_X);
-		playerOne.setDescription(PLAYER_ONE);
-		Player playerTwo = new Player();
-		playerTwo.setId(PLAYER_O);
-		playerTwo.setDescription(PLAYER_TWO);
-		playerList.add(playerOne);
-		playerList.add(playerTwo);
-		return new ResponseEntity<>(playerList, HttpStatus.OK);
+		Player playerX = new Player();
+		playerX.setId(PLAYER_X);
+		playerX.setDescription(PLAYER_TWO);
+		Player playerO = new Player();
+		playerO.setId(PLAYER_O);
+		playerO.setDescription(PLAYER_TWO);
+		playerList.add(playerX);
+		playerList.add(playerO);
+		return playerList;
+
 	}
 }
