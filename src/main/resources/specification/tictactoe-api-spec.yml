@@ -50,6 +50,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TurnResponse'                  
+  /tictactoe/stateOfGameBoard:
+    get:
+      tags:
+        - tic-tac-toe-controller
+      operationId: getStateOfGameBoard
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
 
 components:
   schemas:

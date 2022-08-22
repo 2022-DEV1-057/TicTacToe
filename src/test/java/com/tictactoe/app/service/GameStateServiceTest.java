@@ -304,6 +304,16 @@ class GameStateServiceTest {
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
+	@Test
+	public void getCurrentStateOfGameBoard() throws Exception {
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		gameStateService.setGameBoard(existingGameBoard);
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/tictactoe/stateOfGameBoard");
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		ObjectWriter ow = new ObjectMapper().writer();
+		assertEquals(ow.writeValueAsString(getDefaultGameBoard()), result.getResponse().getContentAsString());
+	}
+
 	public Map<String, String> getDefaultGameBoard() {
 		Map<String, String> defaultGameBoard = new HashMap<>();
 		defaultGameBoard.put(POSITION_ONE_ON_GAME_BOARD, null);
