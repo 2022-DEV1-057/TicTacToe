@@ -14,8 +14,8 @@ import com.tictactoe.app.openapi.model.Player;
 public class PlayerService implements TictactoePlayersApiDelegate {
 	private static final String PLAYER_X = "X";
 	private static final String PLAYER_O = "O";
-	private static final String PLAYER_ONE = "Player X";
-	private static final String PLAYER_TWO = "Player O";
+	private static final String PLAYER_DESCRIPTION_X = "Player X";
+	private static final String PLAYER_DESCRIPTION_O = "Player O";
 
 	@Override
 	public ResponseEntity<List<Player>> getPlayersInfo() {
@@ -27,10 +27,10 @@ public class PlayerService implements TictactoePlayersApiDelegate {
 		List<Player> playerList = new ArrayList<>();
 		Player playerX = new Player();
 		playerX.setId(PLAYER_X);
-		playerX.setDescription(PLAYER_TWO);
+		playerX.setDescription(PLAYER_DESCRIPTION_X);
 		Player playerO = new Player();
 		playerO.setId(PLAYER_O);
-		playerO.setDescription(PLAYER_TWO);
+		playerO.setDescription(PLAYER_DESCRIPTION_O);
 		playerList.add(playerX);
 		playerList.add(playerO);
 		return playerList;
