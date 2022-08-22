@@ -21,17 +21,20 @@ import com.tictactoe.app.openapi.model.Player;
 @SpringBootTest
 @AutoConfigureMockMvc
 class PlayerServiceTest {
+
+	private static final String PLAYERS_INFO_ENDPOINT = "/tictactoe-players/info";
+	private final String EXPECTED_TEAM_INFO = "[{\"id\":\"X\",\"description\":\"Player X\"},{\"id\":\"O\",\"description\":\"Player O\"}]";
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Test
 	void checkGetPlayerEndPointServiceAvailable() throws Exception {
-		this.mockMvc.perform(get("/tictactoe-players/info")).andExpect(status().is(200));
+		this.mockMvc.perform(get(PLAYERS_INFO_ENDPOINT)).andExpect(status().is(200));
 	}
 
 	@Test
 	void checkPlayersCount() throws Exception {
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/tictactoe-players/info");
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PLAYERS_INFO_ENDPOINT);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		String responseBody = result.getResponse().getContentAsString();
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -41,10 +44,9 @@ class PlayerServiceTest {
 
 	@Test
 	void checkPlayersInformation() throws Exception {
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/tictactoe-players/info");
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PLAYERS_INFO_ENDPOINT);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		String responseBody = result.getResponse().getContentAsString();
-		assertEquals("[{\"id\":\"X\",\"description\":\"Player X\"},{\"id\":\"O\",\"description\":\"Player O\"}]",
-				responseBody);
+		assertEquals(EXPECTED_TEAM_INFO, responseBody);
 	}
 }
