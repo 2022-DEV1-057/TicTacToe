@@ -2,6 +2,15 @@ package com.tictactoe.app.service;
 
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_O;
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_X;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_EIGHT_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_FIVE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_FOUR_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_NINE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_ONE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_SEVEN_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_SIX_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_THREE_ON_GAME_BOARD;
+import static com.tictactoe.app.utility.ConstantUtility.POSITION_TWO_ON_GAME_BOARD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,11 +72,8 @@ class GameStateServiceTest {
 	public void updateFirstPlayerFirstMove() throws Exception {
 		Map<String, String> expectedGameBoard = getDefaultGameBoard();
 		gameStateService.setGameBoard(expectedGameBoard);
-		TurnRequest inputTurnRequest = new TurnRequest();
-		inputTurnRequest.setPlayerId(PLAYER_X);
-		inputTurnRequest.setPosition(1);
 		ObjectWriter ow = new ObjectMapper().writer();
-		String inputRequestJson = ow.writeValueAsString(inputTurnRequest);
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_X, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
@@ -82,11 +88,8 @@ class GameStateServiceTest {
 		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
 		exisitngGameBoard.put("1", PLAYER_X);
 		gameStateService.setGameBoard(exisitngGameBoard);
-		TurnRequest inputTurnRequest = new TurnRequest();
-		inputTurnRequest.setPlayerId(PLAYER_O);
-		inputTurnRequest.setPosition(1);
 		ObjectWriter ow = new ObjectMapper().writer();
-		String inputRequestJson = ow.writeValueAsString(inputTurnRequest);
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		mockMvc.perform(requestBuilder).andExpect(status().is(400));
@@ -97,11 +100,8 @@ class GameStateServiceTest {
 		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
 		exisitngGameBoard.put("1", PLAYER_O);
 		gameStateService.setGameBoard(exisitngGameBoard);
-		TurnRequest inputTurnRequest = new TurnRequest();
-		inputTurnRequest.setPlayerId(PLAYER_O);
-		inputTurnRequest.setPosition(1);
 		ObjectWriter ow = new ObjectMapper().writer();
-		String inputRequestJson = ow.writeValueAsString(inputTurnRequest);
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 1));
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
 				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
 		mockMvc.perform(requestBuilder).andExpect(status().is(400));
@@ -109,15 +109,15 @@ class GameStateServiceTest {
 
 	public Map<String, String> getDefaultGameBoard() {
 		Map<String, String> defaultGameBoard = new HashMap<>();
-		defaultGameBoard.put("1", null);
-		defaultGameBoard.put("2", null);
-		defaultGameBoard.put("3", null);
-		defaultGameBoard.put("4", null);
-		defaultGameBoard.put("5", null);
-		defaultGameBoard.put("6", null);
-		defaultGameBoard.put("7", null);
-		defaultGameBoard.put("8", null);
-		defaultGameBoard.put("9", null);
+		defaultGameBoard.put(POSITION_ONE_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_TWO_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_THREE_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_FIVE_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_SIX_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_SEVEN_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_EIGHT_ON_GAME_BOARD, null);
+		defaultGameBoard.put(POSITION_NINE_ON_GAME_BOARD, null);
 		return defaultGameBoard;
 	}
 
@@ -128,5 +128,12 @@ class GameStateServiceTest {
 		NewGameInfo gameBoardInfo = objectMapper.readValue(responseBody, NewGameInfo.class);
 		return gameBoardInfo;
 
+	}
+
+	public TurnRequest prepareInputTurnRequest(String playerId, int position) {
+		TurnRequest turnRequest = new TurnRequest();
+		turnRequest.setPlayerId(playerId);
+		turnRequest.setPosition(position);
+		return turnRequest;
 	}
 }
