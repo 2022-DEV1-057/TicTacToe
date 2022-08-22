@@ -39,6 +39,7 @@ import com.tictactoe.app.openapi.model.Player;
 import com.tictactoe.app.openapi.model.TurnRequest;
 import com.tictactoe.app.openapi.model.TurnResponse;
 import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_X;
+import static com.tictactoe.app.utility.ConstantUtility.PLAYER_DESCRIPTION_O;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -158,6 +159,29 @@ class GameStateServiceTest {
 		Player expectedwinner = new Player();
 		expectedwinner.setId(PLAYER_X);
 		expectedwinner.setDescription(PLAYER_DESCRIPTION_X);
+		TurnResponse expectedResponse = new TurnResponse();
+		expectedResponse.setState(existingGameBoard);
+		expectedResponse.setWinner(expectedwinner);
+		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
+	}
+
+	@Test
+	public void checkHorizontalWinningToPlayerO() throws Exception {
+		Map<String, String> existingGameBoard = getDefaultGameBoard();
+		existingGameBoard.put("1", "O");
+		existingGameBoard.put("4", "X");
+		existingGameBoard.put("2", "O");
+		existingGameBoard.put("5", "X");
+		gameStateService.setGameBoard(existingGameBoard);
+		ObjectWriter ow = new ObjectMapper().writer();
+		String inputRequestJson = ow.writeValueAsString(prepareInputTurnRequest(PLAYER_O, 3));
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch(PLAYER_TURN_ENDPOINT)
+				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		MockHttpServletResponse responseActual = result.getResponse();
+		Player expectedwinner = new Player();
+		expectedwinner.setId(PLAYER_O);
+		expectedwinner.setDescription(PLAYER_DESCRIPTION_O);
 		TurnResponse expectedResponse = new TurnResponse();
 		expectedResponse.setState(existingGameBoard);
 		expectedResponse.setWinner(expectedwinner);
