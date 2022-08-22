@@ -72,7 +72,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void updateFirstPlayerFirstMove() throws Exception {
+	void updateFirstPlayerFirstMove() throws Exception {
 		Map<String, String> expectedGameBoard = getDefaultGameBoard();
 		gameStateService.setGameBoard(expectedGameBoard);
 		ObjectWriter ow = new ObjectMapper().writer();
@@ -87,7 +87,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void ShouldNotUpdateSamePosition() throws Exception {
+	void ShouldNotUpdateSamePosition() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_X);
 		gameStateService.setGameBoard(existingGameBoard);
@@ -99,7 +99,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void SamePlayerShouldNotTakeContinuousTurnsOnStartUp() throws Exception {
+	void SamePlayerShouldNotTakeContinuousTurnsOnStartUp() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
 		gameStateService.setGameBoard(existingGameBoard);
@@ -111,7 +111,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerX() throws Exception {
+	void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerX() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
 		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_X);
@@ -127,7 +127,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerO() throws Exception {
+	void SamePlayerShouldNotTakeContinuousTurnsOnAnyStateOfGmeByPlayerO() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_X);
 		existingGameBoard.put(POSITION_TWO_ON_GAME_BOARD, PLAYER_O);
@@ -143,7 +143,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void checkHorizontalWinningToPlayerX() throws Exception {
+	void checkHorizontalWinningToPlayerX() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_X);
 		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_O);
@@ -166,7 +166,7 @@ class GameStateServiceTest {
 	}
 
 	@Test
-	public void checkHorizontalWinningToPlayerO() throws Exception {
+	void checkHorizontalWinningToPlayerO() throws Exception {
 		Map<String, String> existingGameBoard = getDefaultGameBoard();
 		existingGameBoard.put(POSITION_ONE_ON_GAME_BOARD, PLAYER_O);
 		existingGameBoard.put(POSITION_FOUR_ON_GAME_BOARD, PLAYER_X);
