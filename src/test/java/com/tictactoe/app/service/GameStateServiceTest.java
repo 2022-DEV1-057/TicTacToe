@@ -74,6 +74,21 @@ class GameStateServiceTest {
 		assertEquals(ow.writeValueAsString(expectedResponse), responseActual.getContentAsString());
 	}
 
+	@Test
+	public void ShouldNotUpdateSamePosition() throws Exception {
+		Map<String, String> exisitngGameBoard = getDefaultGameBoard();
+		exisitngGameBoard.put("1", "O");
+		gameStateService.setGameBoard(exisitngGameBoard);
+		TurnRequest inputTurnRequest = new TurnRequest();
+		inputTurnRequest.setPlayerId("O");
+		inputTurnRequest.setPosition(1);
+		ObjectWriter ow = new ObjectMapper().writer();
+		String inputRequestJson = ow.writeValueAsString(inputTurnRequest);
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/tictactoe/playerTurn")
+				.accept(MediaType.APPLICATION_JSON).content(inputRequestJson).contentType(MediaType.APPLICATION_JSON);
+		mockMvc.perform(requestBuilder).andExpect(status().is(400));
+	}
+
 	public Map<String, String> getDefaultGameBoard() {
 		Map<String, String> defaultGameBoard = new HashMap<>();
 		defaultGameBoard.put("1", null);

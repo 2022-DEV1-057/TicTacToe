@@ -43,6 +43,11 @@ public class GameStateService implements TictactoeApiDelegate {
 	@Override
 	public ResponseEntity<TurnResponse> playerTurn(TurnRequest turnRequest) {
 		log.info("--: Executing player move :--");
+		if (getCurrentlyPlayingGameBoard().get(String.valueOf(turnRequest.getPosition())) != null) {
+			log.error("--:Player-{} trying wrong move, occupied position/slot not allowed:--",
+					turnRequest.getPlayerId());
+			return new ResponseEntity<TurnResponse>(HttpStatus.BAD_REQUEST);
+		}
 		getCurrentlyPlayingGameBoard().put(String.valueOf(turnRequest.getPosition()), turnRequest.getPlayerId());
 		TurnResponse turnResponse = new TurnResponse();
 		turnResponse.setState(getCurrentlyPlayingGameBoard());
