@@ -72,4 +72,66 @@ This RESTful service is available to play tictactoe game with below endpoints.
 	        "description": "PLAYER_O"
 	    }
     ]
+ Player Turn : Its a PATCH request to update player move on game board. Input body is json format message as below example.
+
+	HTTP PATCH Request URL: http://localhost:8080/tictactoe/playerTurn
+	
+	Request example Json: 
+	{
+	  "playerId" : "X",
+	  "position" : 1
+    }
+
+	Response Example Json:
+	Player X response
+	{
+    "gameOver": false,
+    "winner": null,
+    "state": {
+        "1": "X",
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null
+    }
+    }  
+    player O response:
+    {
+    "gameOver": false,
+    "winner": null,
+    "state": {
+        "1": "X",
+        "2": null,
+        "3": "O",
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null
+    }}
+    
+    Winning response example :
+    {
+    "gameOver": true,
+    "winner": {
+        "id": "X",
+        "description": "Player X"
+    },
+    "state": {
+        "1": "X",
+        "2": null,
+        "3": "O",
+        "4": "O",
+        "5": "X",
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": "X"
+    }
+    }
    	
