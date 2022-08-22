@@ -32,3 +32,27 @@ Commmandline : First , execute mvn clean compile  then execute following command
 >java -jar target/TicTacToe-0.0.1-SNAPSHOT.jar
 ```
 
+## Getting Start 
+### Testing through Postman
+This RESTful service is available to play tictactoe game with below endpoints.
+
+
+ Start new game: Its a POST request with no input, below request creates the new game simply.
+
+    HTTP POST Request URL: http://localhost:9090/tictactoe/startNewGame
+    
+    Response example Json: 
+    {
+	    "message": "Hello Mr.X and Mr.O your game started!,All the best and enjoy playing",
+	    "gameboard": {
+	        "1": null,
+	        "2": null,
+	        "3": null,
+	        "4": null,
+	        "5": null,
+	        "6": null,
+	        "7": null,
+	        "8": null,
+	        "9": null
+	    }
+    }
